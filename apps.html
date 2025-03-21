@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VR7 - Apps</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            background-color: #0a0a0a;
+            color: white;
+            overflow-x: hidden;
+            background-image: linear-gradient(to bottom, #000000, #0a0a20);
+        }
+        
+        .navbar {
+            width: 100%;
+            text-align: center;
+            padding-top: 20px;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            display: inline-block;
+            background: linear-gradient(90deg, #1d1d42, #36128c, #1d1d42);
+            border-radius: 15px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(102, 0, 255, 0.5);
+        }
+        
+        .navbar a {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 16px 30px;
+            text-decoration: none;
+            font-size: 18px;
+            margin: 0;
+            float: right;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        
+        .navbar a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .content {
+            padding: 120px 20px 50px;
+            text-align: center;
+            min-height: 100vh;
+        }
+        
+        .apps-title {
+            font-size: 80px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            margin: 80px 0 60px;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s, transform 1s;
+            background: linear-gradient(to right, #ff0000, #6600ff, #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 300% 100%;
+            animation: gradient 8s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% {background-position: 0% 50%}
+            50% {background-position: 100% 50%}
+            100% {background-position: 0% 50%}
+        }
+        
+        .section-text {
+            max-width: 800px;
+            margin: 0 auto 50px;
+            font-size: 18px;
+            line-height: 1.6;
+            background-color: rgba(10, 10, 30, 0.5);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #6600ff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s, transform 1s;
+        }
+        
+        .app-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin: 60px auto;
+            max-width: 1200px;
+        }
+        
+        .app-card {
+            width: 350px;
+            background: rgba(30, 30, 60, 0.5);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(102, 0, 255, 0.3);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s, transform 1s;
+        }
+        
+        .app-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(102, 0, 255, 0.6);
+            border: 1px solid rgba(102, 0, 255, 0.6);
+        }
+        
+        .app-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 24px;
+            margin: 0 auto 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .app-card:hover .app-logo {
+            transform: scale(1.1);
+            box-shadow: 0 15px 30px rgba(102, 0, 255, 0.5);
+        }
+        
+        .scarlet-logo {
+            background: linear-gradient(45deg, #ff3333, #ff0066);
+        }
+        
+        .esign-logo {
+            background: linear-gradient(45deg, #3366ff, #00ccff);
+        }
+        
+        .app-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #ff0066, #6600ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .esign-title {
+            background: linear-gradient(45deg, #0066ff, #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .app-description {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            color: #cccccc;
+        }
+        
+        .app-features {
+            text-align: right;
+            margin: 25px 0;
+            padding: 0 10px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(20, 20, 40, 0.5);
+            transition: all 0.3s;
+        }
+        
+        .feature-item:hover {
+            background: rgba(102, 0, 255, 0.2);
+            transform: translateX(-5px);
+        }
+        
+        .feature-icon {
+            margin-left: 15px;
+            font-size: 20px;
+            color: #6600ff;
+        }
+        
+        .esign-feature .feature-icon {
+            color: #00ccff;
+        }
+        
+        .app-download-button {
+            padding: 16px 32px;
+            font-size: 18px;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s;
+            font-weight: 700;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        
+        .app-download-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .app-download-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .app-download-button:hover::before {
+            left: 100%;
+        }
+        
+        .scarlet-button {
+            background: linear-gradient(45deg, #ff3333, #ff0066);
+        }
+        
+        .esign-button {
+            background: linear-gradient(45deg, #3366ff, #00ccff);
+        }
+        
+        .app-version {
+            font-size: 14px;
+            color: #999999;
+            margin-top: 20px;
+        }
+        
+        .app-size {
+            font-size: 14px;
+            color: #999999;
+            margin-top: 5px;
+        }
+        
+        .technical-section {
+            margin-top: 50px;
+        }
+        
+        .app-screenshots {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            overflow-x: auto;
+            padding: 15px 0;
+        }
+        
+        .app-screenshots img {
+            height: 180px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .app-screenshots img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(102, 0, 255, 0.5);
+        }
+        
+        .instruction-title {
+            font-size: 26px;
+            font-weight: 700;
+            margin: 30px 0 20px;
+            color: white;
+        }
+        
+        .instruction-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(30, 30, 60, 0.5);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(102, 0, 255, 0.3);
+        }
+        
+        .instruction-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(20, 20, 40, 0.5);
+            transition: all 0.3s;
+        }
+        
+        .instruction-step:hover {
+            background: rgba(102, 0, 255, 0.2);
+            transform: translateX(-5px);
+        }
+        
+        .step-number {
+            font-size: 24px;
+            font-weight: 900;
+            color: #6600ff;
+            margin-left: 15px;
+            min-width: 30px;
+        }
+        
+        .esign-step .step-number {
+            color: #00ccff;
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background-color: rgba(102, 0, 255, 0.3);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+        }
+        
+        .animated-glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #6600ff, 0 0 40px #6600ff;
+            }
+            to {
+                text-shadow: 0 0 20px #fff, 0 0 30px #00ccff, 0 0 40px #00ccff, 0 0 50px #00ccff;
+            }
+        }
+        
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s, transform 1s;
+        }
+        
+        .fade-in-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .features-title {
+            font-size: 36px;
+            font-weight: 800;
+            margin: 80px auto 30px;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            color: white;
+            text-shadow: 0 0 15px rgba(102, 0, 255, 0.7);
+            background: linear-gradient(45deg, #6600ff, #00ccff);
+            padding: 15px 40px;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s, transform 1s;
+        }
+        
+        /* تحسينات للتجاوب مع جميع الأحجام */
+        @media screen and (max-width: 1200px) {
+            .app-container {
+                max-width: 90%;
+            }
+        }
+        
+        @media screen and (max-width: 992px) {
+            .apps-title {
+                font-size: 60px;
+                margin: 60px 0 40px;
+            }
+            
+            .app-card {
+                width: 300px;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .navbar a {
+                padding: 12px 20px;
+                font-size: 16px;
+            }
+            
+            .apps-title {
+                font-size: 50px;
+                letter-spacing: 3px;
+                margin: 50px 0 30px;
+            }
+            
+            .section-text {
+                padding: 20px;
+                font-size: 16px;
+            }
+            
+            .features-title {
+                font-size: 30px;
+                padding: 12px 30px;
+            }
+            
+            .app-screenshots img {
+                height: 150px;
+            }
+        }
+        
+        @media screen and (max-width: 576px) {
+            .navbar {
+                padding-top: 10px;
+            }
+            
+            .nav-container {
+                width: 95%;
+                display: flex;
+                justify-content: space-around;
+            }
+            
+            .navbar a {
+                padding: 10px 15px;
+                font-size: 14px;
+                float: none;
+            }
+            
+            .apps-title {
+                font-size: 40px;
+                letter-spacing: 2px;
+                margin: 40px 0 20px;
+            }
+            
+            .content {
+                padding: 100px 10px 30px;
+            }
+            
+            .section-text {
+                margin-bottom: 30px;
+                padding: 15px;
+                font-size: 14px;
+            }
+            
+            .features-title {
+                font-size: 24px;
+                padding: 10px 20px;
+                margin: 40px auto 20px;
+            }
+            
+            .app-card {
+                width: 90%;
+                padding: 20px;
+            }
+            
+            .app-title {
+                font-size: 28px;
+            }
+            
+            .app-description {
+                font-size: 14px;
+            }
+            
+            .app-screenshots {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .app-screenshots img {
+                width: 80%;
+                height: auto;
+            }
+        }
+        
+        @media screen and (max-width: 400px) {
+            .apps-title {
+                font-size: 30px;
+            }
+            
+            .navbar a {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+            
+            .app-card {
+                padding: 15px;
+            }
+        }
+        
+        /* تحسينات لمنع الأخطاء في التخطيط على الأجهزة الصغيرة */
+        * {
+            box-sizing: border-box;
+        }
+        
+        /* تحسينات لتجربة المستخدم على الأجهزة باللمس */
+        @media (hover: none) {
+            .app-download-button:hover {
+                transform: none;
+            }
+            
+            .app-card:hover {
+                transform: none;
+            }
+            
+            .instruction-step:hover {
+                transform: none;
+            }
+        }
+        
+        /* تحسين عرض الجزيئات على الأجهزة الصغيرة */
+        @media screen and (max-width: 768px) {
+            .particles .particle {
+                width: 50px !important;
+                height: 50px !important;
+            }
+        }
+
+        .modern-card {
+    position: relative;
+    width: 380px;
+    background: rgba(25, 25, 50, 0.7);
+    border-radius: 24px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(100, 100, 255, 0.2);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-style: preserve-3d;
+}
+
+.modern-card:hover {
+    transform: translateY(-15px) rotateX(5deg);
+    box-shadow: 0 30px 50px rgba(94, 68, 255, 0.4);
+    border-color: rgba(94, 68, 255, 0.6);
+}
+
+.app-banner {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #5e44ff, #00c3ff);
+}
+
+.app-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://placeholder-for-fortnite-image.jpg') center/cover;
+    opacity: 0.6;
+    z-index: 1;
+}
+
+.app-banner::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to top, rgba(25, 25, 50, 1), transparent);
+    z-index: 2;
+}
+
+.modern-logo {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    bottom: -50px;
+    left: 30px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #5e44ff, #00c3ff);
+    box-shadow: 0 10px 30px rgba(94, 68, 255, 0.6);
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    color: white;
+    transition: transform 0.3s ease;
+}
+
+.modern-card:hover .modern-logo {
+    transform: scale(1.1) translateY(-10px);
+}
+
+.modern-content {
+    padding: 70px 30px 30px;
+}
+
+.modern-title {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, #5e44ff, #00c3ff, #5e44ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 100%;
+    animation: gradient-shift 5s ease infinite;
+}
+
+@keyframes gradient-shift {
+    0% {background-position: 0% 50%}
+    50% {background-position: 100% 50%}
+    100% {background-position: 0% 50%}
+}
+
+.modern-desc {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    color: #ccccff;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    padding: 0 10px;
+}
+
+.stat-item {
+    text-align: center;
+    background: rgba(94, 68, 255, 0.1);
+    padding: 10px 15px;
+    border-radius: 12px;
+    transition: all 0.3s;
+}
+
+.stat-item:hover {
+    background: rgba(94, 68, 255, 0.2);
+    transform: translateY(-5px);
+}
+
+.stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #aaaacc;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.modern-feature {
+    background: rgba(30, 30, 60, 0.6);
+    border-radius: 12px;
+    padding: 15px;
+    transition: all 0.3s;
+    border-left: 3px solid transparent;
+}
+
+.modern-feature:hover {
+    background: rgba(94, 68, 255, 0.15);
+    transform: translateY(-5px);
+    border-left: 3px solid #5e44ff;
+}
+
+.feature-icon {
+    display: block;
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.modern-button {
+    display: block;
+    width: 100%;
+    padding: 16px 0;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #5e44ff, #00c3ff);
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(94, 68, 255, 0.4);
+    z-index: 1;
+}
+
+.modern-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(94, 68, 255, 0.6);
+}
+
+.modern-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: 0.5s;
+    z-index: -1;
+}
+
+.modern-button:hover::before {
+    left: 100%;
+}
+
+.install-steps {
+    margin-top: 40px;
+    background: rgba(30, 30, 60, 0.4);
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+}
+
+.steps-title {
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    background: linear-gradient(135deg, #5e44ff, #00c3ff);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    box-shadow: 0 5px 15px rgba(94, 68, 255, 0.4);
+}
+
+.step-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(20, 20, 40, 0.5);
+    transition: all 0.3s;
+}
+
+.step-item:hover {
+    background: rgba(94, 68, 255, 0.15);
+    transform: translateX(5px);
+}
+
+.step-number {
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, #5e44ff, #00c3ff);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    margin-left: 15px;
+    box-shadow: 0 5px 10px rgba(94, 68, 255, 0.4);
+}
+
+.step-content {
+    font-size: 14px;
+}
+
+/* تحسينات للعرض على الأجهزة المحمولة */
+@media screen and (max-width: 576px) {
+    .modern-card {
+        width: 90%;
+    }
+    
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-container {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .stat-item {
+        flex: 1 0 40%;
+    }
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- خلفية بجزيئات متحركة -->
+    <div class="particles" id="particles"></div>
+    
+    <div class="navbar">
+        <div class="nav-container">
+            <a href="index.html">HOME</a>
+            <a href="executor.html">EXECUTOR</a>
+            <a href="problems.html">problems</a>
+            <a href="apps.html">APPS</a>
+            <a href="code.html">code</a>
+        </div>
+    </div>
+    
+    <div class="content">
+        <h1 id="apps-title" class="apps-title">VR7 APPS</h1>
+        
+        <div class="section-text fade-in-section">
+            <p>تطبيقات مميزة تم اختيارها بعناية لتحسين تجربتك. تضم مجموعتنا تطبيقات ذات فائدة كبيرة مثل Scarlet و Esign لتلبية احتياجاتك المختلفة.</p>
+        </div>
+        
+        <div class="app-container">
+            <!-- Scarlet App Card -->
+            <div class="app-card fade-in-section">
+                    <a href="s.png"></a>
+                    <!-- يمكن استبدالها بصورة حقيقية للتطبيق -->
+                </div>
+                <h2 class="app-title">Scarlet</h2>
+                <p class="app-description">تطبيق متميز لتنزيل تطبيقات خارجيه ليست من ابل ستور عن طريق التوقيع</p>
+                
+                <div class="app-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">⚡</span>
+                        <span>تنزيل فيديوهات عالية الجودة</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🎵</span>
+                        <span>استخراج الصوت من الفيديوهات</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">📱</span>
+                        <span>دعم جميع المنصات الشهيرة</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🔄</span>
+                        <span>تحديثات مستمرة ودعم فني</span>
+                    </div>
+                </div>
+                
+                <div class="app-version">الإصدار: 1.53.2</div>
+                <div class="app-size">الحجم: 28.5 MB</div>
+                
+                <a href="هنا رابط تحميل ايساين " class="app-download-button scarlet-button">تحميل Scarlet</a>
+                
+                <div class="technical-section">
+                    <h3 class="instruction-title">طريقة التثبيت</h3>
+                    <div class="instruction-container">
+                        <div class="instruction-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">اضغط على زر التحميل واختر "فتح"</div>
+                        </div>
+                        <div class="instruction-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">اختر "تثبيت" عند ظهور النافذة</div>
+                        </div>
+                        <div class="instruction-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">اذهب إلى الإعدادات > عام > إدارة الجهاز وقم بتوثيق التطبيق</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Esign App Card -->
+            <div class="app-card fade-in-section">
+                    <!-- يمكن استبدالها بصورة حقيقية للتطبيق -->
+                </div>
+                <h2 class="app-title esign-title">Esign</h2>
+                <p class="app-description">أداة قوية لتوقيع التطبيقات وإعادة توزيعها. يتيح لك تثبيت التطبيقات المعدلة وتخصيصها حسب احتياجاتك.</p>
+                
+                <div class="app-features">
+                    <div class="feature-item esign-feature">
+                        <span class="feature-icon">📝</span>
+                        <span>توقيع التطبيقات بسهولة</span>
+                    </div>
+                    <div class="feature-item esign-feature">
+                        <span class="feature-icon">🔐</span>
+                        <span>دعم شهادات التوقيع المخصصة</span>
+                    </div>
+                    <div class="feature-item esign-feature">
+                        <span class="feature-icon">🔄</span>
+                        <span>إعادة توقيع تلقائي للتطبيقات</span>
+                    </div>
+                    <div class="feature-item esign-feature">
+                        <span class="feature-icon">⚙️</span>
+                        <span>واجهة سهلة الاستخدام</span>
+                    </div>
+                </div>
+                
+                <div class="app-version">الإصدار: 4.7.8</div>
+                <div class="app-size">الحجم: 42.1 MB</div>
+                
+                <a href="هنا رابط تحميل ايساين" class="app-download-button esign-button">تحميل Esign</a>
+                
+                <div class="technical-section">
+                    <h3 class="instruction-title">طريقة التثبيت</h3>
+                    <div class="instruction-container">
+                        <div class="instruction-step esign-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">اضغط على زر التحميل أعلاه</div>
+                        </div>
+                        <div class="instruction-step esign-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">قم بتثبيت التطبيق من خلال الضغط على "تثبيت"</div>
+                        </div>
+                        <div class="instruction-step esign-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">قم بتوثيق التطبيق</div>
+                        </div>
+                        <div class="instruction-step esign-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">افتح تطبيق و اضف شهادات التي لديك و تطبيقات ثم وقع</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <script>
+        // إنشاء جزيئات للخلفية
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // حجم عشوائي
+                const size = Math.random() * 150 + 50;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // موضع عشوائي
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                
+                // حركة عشوائية
+                particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // تأثيرات التمرير
+        function handleScroll() {
+            const scrollPosition = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const sections = document.querySelectorAll('.fade-in-section');
+            
+            // جعل العنوان مرئيًا عند تحميل الصفحة
+            const title = document.getElementById('apps-title');
+            if (scrollPosition > 50) {
+                title.style.opacity = '1';
+                title.style.transform = 'translateY(0)';
+            }
+            
+            // جعل الأقسام مرئية عند التمرير إليها
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                if (sectionTop < windowHeight * 0.8) {
+                    section.classList.add('visible');
+                }
+            });
+        }
+        
+        // إضافة تأثير النقر على الأزرار
+        document.querySelectorAll('.app-download-button').forEach(button => {
+            button.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+        
+        // تشغيل الوظائف عند تحميل الصفحة
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('load', () => {
+            createParticles();
+            handleScroll();
+        });
+        
+        // تشغيل معالج التمرير مرة واحدة عند تحميل الصفحة
+        setTimeout(handleScroll, 100);
+        
+        // تعريف حركة الجزيئات
+        document.styleSheets[0].insertRule(`
+            @keyframes float {
+                0%, 100% { 
+                    transform: translate(0, 0) rotate(0deg); 
+                    opacity: 0.3;
+                }
+                25% { 
+                    transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) rotate(${Math.random() * 90}deg);
+                    opacity: 0.6;
+                }
+                50% { 
+                    transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) rotate(${Math.random() * 180}deg);
+                    opacity: 0.3;
+                }
+                75% { 
+                    transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) rotate(${Math.random() * 270}deg);
+                    opacity: 0.6;
+                }
+            }
+        `, 0);
+        
+        // إضافة تأثير تمرير سلس
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

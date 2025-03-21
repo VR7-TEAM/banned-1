@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قريباً - VR7</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #050a14;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            color: #ffffff;
+            perspective: 1000px;
+        }
+        
+        .container {
+            text-align: center;
+            position: relative;
+            transform-style: preserve-3d;
+            /* تقليل حجم التحرك العائم للاستقرار */
+            animation: float 6s ease-in-out infinite;
+            z-index: 10;
+        }
+        
+        .soon-text {
+            font-size: 130px;
+            font-weight: bold;
+            letter-spacing: 20px;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(0, 230, 255, 0.8),
+                         0 0 20px rgba(0, 200, 255, 0.5),
+                         0 0 30px rgba(0, 180, 255, 0.3);
+            animation: pulse 2s infinite alternate;
+            position: relative;
+        }
+        
+        .soon-text::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00e6ff, transparent);
+            bottom: -10px;
+            left: 0;
+            animation: scan 3s linear infinite;
+        }
+        
+        .vr7-text {
+            font-size: 28px;
+            margin-top: 10px;
+            letter-spacing: 8px;
+            color: #00e6ff;
+            opacity: 0.7;
+            animation: glow 3s infinite alternate;
+            text-transform: uppercase;
+        }
+        
+        /* تحسين شريط التحكم بالصوت */
+        .audio-control-wrapper {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 101;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .sound-toggle {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0, 30, 60, 0.8);
+            border: 2px solid #00e6ff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 230, 255, 0.5);
+        }
+        
+        .sound-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 230, 255, 0.8);
+            background-color: rgba(0, 40, 80, 0.9);
+        }
+        
+        .sound-toggle i {
+            color: #00e6ff;
+            font-size: 20px;
+        }
+        
+        .audio-controls {
+            background-color: rgba(0, 20, 40, 0.7);
+            padding: 12px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 15px rgba(0, 230, 255, 0.3);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 15px;
+            opacity: 0;
+            transform: translateX(-20px);
+            pointer-events: none;
+            transition: all 0.4s ease-out;
+            width: 0;
+            overflow: hidden;
+        }
+        
+        .audio-controls.visible {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+            width: 180px;
+        }
+        
+        .volume-label {
+            font-size: 14px;
+            color: #00e6ff;
+            white-space: nowrap;
+        }
+        
+        .volume-slider {
+            -webkit-appearance: none;
+            width: 100px;
+            height: 5px;
+            background: linear-gradient(90deg, #00e6ff, #0077ff);
+            border-radius: 10px;
+            outline: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 15px;
+            height: 15px;
+            background: #ffffff;
+            border: 2px solid #00e6ff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(0, 230, 255, 0.8);
+        }
+        
+        .volume-slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            background: #ffffff;
+            border: 2px solid #00e6ff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(0, 230, 255, 0.8);
+        }
+        
+        .volume-slider:hover {
+            height: 7px;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1.03);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes glow {
+            0% {
+                opacity: 0.5;
+                text-shadow: 0 0 5px rgba(0, 230, 255, 0.5);
+            }
+            100% {
+                opacity: 0.9;
+                text-shadow: 0 0 15px rgba(0, 230, 255, 0.8);
+            }
+        }
+        
+        /* تحسين التموج العمودي بدلاً من المائل */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @keyframes scan {
+            0%, 100% {
+                transform: translateX(-50%);
+                opacity: 0;
+            }
+            25%, 75% {
+                opacity: 1;
+            }
+            50% {
+                transform: translateX(50%);
+            }
+        }
+        
+        /* تأثير النجوم المتطورة - ثابتة بدون حركة جانبية */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(0.5px);
+            animation: twinkle ease infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.2;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+        
+        /* تأثير الضباب - أكثر استقراراً */
+        .fog {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 30, 50, 0.4) 100%);
+            z-index: 2;
+            /* تحسين استقرار الضباب بحركة بسيطة جداً */
+            animation: fogMove 40s linear infinite;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        @keyframes fogMove {
+            0% {
+                transform: translateY(-2%);
+            }
+            50% {
+                transform: translateY(2%);
+            }
+            100% {
+                transform: translateY(-2%);
+            }
+        }
+        
+        /* شبكة هولوغرامية أكثر استقراراً */
+        .holographic-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                linear-gradient(0deg, transparent 97%, rgba(0, 230, 255, 0.03) 98%, rgba(0, 230, 255, 0.03) 99%, transparent 100%),
+                linear-gradient(90deg, transparent 97%, rgba(0, 230, 255, 0.03) 98%, rgba(0, 230, 255, 0.03) 99%, transparent 100%);
+            background-size: 50px 50px;
+            z-index: 3;
+            transform-origin: center;
+            /* تقليل حركة الشبكة للاستقرار */
+            transform: translateY(-25%) translateX(-25%);
+        }
+    </style>
+</head>
+<body>
+    <div class="fog"></div>
+    <div class="holographic-grid"></div>
+    <div class="stars-container" id="starsContainer"></div>
+    
+    <div class="container">
+        <div class="soon-text">SOON</div>
+        <div class="vr7-text">VR7</div>
+    </div>
+    
+    <div class="audio-control-wrapper">
+        <div class="sound-toggle" id="soundToggle">
+            <i class="fas fa-volume-up"></i>
+        </div>
+        
+        <div class="audio-controls" id="audioControls">
+            <div class="volume-label">الصوت</div>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.5">
+        </div>
+    </div>
+    
+    <audio id="background-audio" loop>
+        <!-- ضع هنا رابط ملف الصوت الخاص بك -->
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script>
+        // التحكم في مشغل الصوت
+        const audio = document.getElementById('background-audio');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const soundToggle = document.getElementById('soundToggle');
+        const audioControls = document.getElementById('audioControls');
+        let isMuted = false;
+        
+        // تشغيل الصوت تلقائياً عند تحميل الصفحة
+        window.addEventListener('load', () => {
+            audio.volume = volumeSlider.value;
+            
+            // محاولة تشغيل الصوت (قد تحتاج إلى تفاعل المستخدم في بعض المتصفحات)
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log('تشغيل الصوت تلقائياً غير مسموح. يحتاج إلى تفاعل المستخدم.');
+                    soundToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                    isMuted = true;
+                });
+            }
+        });
+        
+        // التحكم في مستوى الصوت
+        volumeSlider.addEventListener('input', () => {
+            audio.volume = volumeSlider.value;
+            updateVolumeIcon();
+        });
+        
+        function updateVolumeIcon() {
+            if (audio.volume === 0 || isMuted) {
+                soundToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else if (audio.volume < 0.5) {
+                soundToggle.innerHTML = '<i class="fas fa-volume-down"></i>';
+            } else {
+                soundToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+        }
+        
+        // إظهار/إخفاء شريط التحكم بالصوت
+        let isControlsVisible = false;
+        soundToggle.addEventListener('click', () => {
+            // تبديل حالة الصوت عند النقر
+            isMuted = !isMuted;
+            
+            if (isMuted) {
+                audio.pause();
+                soundToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                audio.play();
+                updateVolumeIcon();
+            }
+            
+            // تبديل عرض شريط التحكم
+            isControlsVisible = !isControlsVisible;
+            
+            if (isControlsVisible) {
+                audioControls.classList.add('visible');
+            } else {
+                audioControls.classList.remove('visible');
+            }
+        });
+        
+        // إنشاء نجوم ثابتة في الخلفية
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            const starsCount = 300;
+            
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // نوع النجمة (حجم وسطوع مختلف)
+                const type = Math.floor(Math.random() * 3);
+                let size, opacity, color;
+                
+                if (type === 0) { // نجوم صغيرة
+                    size = Math.random() * 1 + 0.5;
+                    opacity = Math.random() * 0.5 + 0.3;
+                    color = `rgba(255, 255, 255, ${opacity})`;
+                } else if (type === 1) { // نجوم متوسطة
+                    size = Math.random() * 2 + 1;
+                    opacity = Math.random() * 0.7 + 0.5;
+                    color = `rgba(220, 240, 255, ${opacity})`;
+                } else { // نجوم كبيرة مضيئة
+                    size = Math.random() * 3 + 1.5;
+                    opacity = Math.random() * 0.8 + 0.6;
+                    color = `rgba(200, 230, 255, ${opacity})`;
+                    star.style.boxShadow = `0 0 ${size * 2}px rgba(100, 200, 255, 0.8)`;
+                }
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.backgroundColor = color;
+                
+                // موضع عشوائي
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // مدة وتأخير عشوائي للوميض
+                const duration = 2 + Math.random() * 5;
+                const delay = Math.random() * 5;
+                star.style.animationDuration = `${duration}s`;
+                star.style.animationDelay = `${delay}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // إضافة تأثير النجوم المتحركة بشكل عمودي فقط
+        function createShootingStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    const shootingStar = document.createElement('div');
+                    shootingStar.style.position = 'absolute';
+                    shootingStar.style.width = '2px';
+                    shootingStar.style.height = '2px';
+                    shootingStar.style.backgroundColor = '#ffffff';
+                    shootingStar.style.borderRadius = '50%';
+                    shootingStar.style.boxShadow = '0 0 20px 4px rgba(100, 200, 255, 0.8)';
+                    shootingStar.style.zIndex = '10';
+                    
+                    // موضع البداية في أعلى الشاشة
+                    const startX = Math.random() * window.innerWidth;
+                    const startY = -10;
+                    
+                    // حركة عمودية للأسفل فقط
+                    const endY = window.innerHeight + 10;
+                    
+                    shootingStar.style.top = `${startY}px`;
+                    shootingStar.style.left = `${startX}px`;
+                    
+                    shootingStar.style.transition = 'all 1s linear';
+                    
+                    starsContainer.appendChild(shootingStar);
+                    
+                    setTimeout(() => {
+                        shootingStar.style.transform = `translateY(${endY}px)`;
+                        shootingStar.style.opacity = '0';
+                    }, 10);
+                    
+                    setTimeout(() => {
+                        starsContainer.removeChild(shootingStar);
+                    }, 1000);
+                }
+            }, 500);
+        }
+        
+        // تنفيذ الدوال
+        createStars();
+        createShootingStars();
+        
+        // إزالة التفاعل مع المؤشر للحفاظ على التوازن
+    </script>
+</body>
+</html>
